@@ -1,0 +1,253 @@
+body { 
+    background-color:rgb(24, 24, 36);
+    width: 1000px;
+    line-height: 2;
+    color: rgba(255, 254, 254, 0.938);
+    margin: auto;
+}
+
+svg {
+    width: 500px;
+    height: 700px;
+    display: inline-block;
+    margin-top: 40px;
+}
+
+.header ul {
+    width: 100%; 
+    line-height: 22px;
+    border-bottom: 0.5px solid rgba(173, 216, 230, 0.856);
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    text-align: center;
+}
+.header ul li {
+    display: inline; 
+    text-align: center;
+    margin-left: 4%;
+    font-size: 14px;
+    color: rgb(197, 197, 197);
+}
+.header ul li a {
+    font-family: "明朝";
+}
+.header ul li:hover {
+    opacity: 0.6;
+}
+#here {
+    color: rgb(233, 151, 0);
+}
+
+
+.main_box {
+    width: 420px;
+    height: 700px;
+    margin: 0px 8px 16px 32px;
+    text-align: center;
+    border: 2px solid rgba(139, 189, 199, 0.295);
+    display: inline-block;
+    background-color: rgba(173, 216, 230, 0.856);
+    position: absolute;
+}
+
+.description {
+    border: 1px solid rgba(240, 173, 48, 0.733);
+    box-shadow: 2px 1.5px rgba(10, 10, 10, 0.685);
+    border-radius: 20px;
+    background-color:rgb(24, 24, 36);
+    width: 95%;
+    height: 280px;
+    margin: auto;
+}
+
+.service_description {
+    text-align: left;
+    margin-top: 16px;
+}
+
+.description p {
+    width: 90%;
+    margin: auto;
+    font-size: 15px;
+}
+
+.description input {
+    margin: 16px;
+}
+
+.option_box {
+    border: 2px solid rgba(240, 173, 48, 0.733);
+    border-radius: 20px;
+    background-color:rgb(24, 24, 36);
+    width: 95%;
+    height: 360px;
+    margin: auto;
+    display: none;
+}
+
+#backbtn input {
+    background-color: rgba(0, 255, 255, 0);
+    color: white;
+}
+
+#backbtn:hover{
+    cursor: pointer;
+}
+
+.title {
+    color: rgb(233, 151, 0);
+
+}
+
+.title h1 {
+    font-size: 28px;
+}
+
+.topic {
+    color:rgba(4, 4, 122, 0.911);
+}
+
+.topic h2 {
+    font-size: 18px;
+}
+
+.image_box {
+    width: 90%;
+    margin: 8px auto auto auto;
+}
+
+#box_image {
+    width: 280px;
+    height: 180px;
+    border-radius: 20px;
+}
+
+.prefecture {
+    width: 60%;
+    border-bottom: 1px solid white;
+    margin: 4px auto 16px auto;
+}
+
+.prefecture h2 {
+    color:rgb(24, 24, 36);
+    font-family: "游ゴシック","Yu Gothic";
+    font-size: 28px;
+}
+
+.first_line {
+    width: 90%;
+    border: 1px solid rgba(240, 173, 48, 0.733);
+    margin: 32px auto 16px auto;
+    background-color: rgba(173, 216, 230, 0.856);
+    border-radius: 10px;
+}
+.first_line span {
+    line-height: 2;
+    margin: 8px;
+    color:rgb(24, 24, 36);
+}
+.first_line input:hover{
+    cursor: pointer;
+}
+.second_line {
+    width: 90%;
+    border: 1px solid rgba(240, 173, 48, 0.733);
+    margin: 16px auto 16px auto;
+    background-color: rgba(173, 216, 230, 0.856);
+    border-radius: 10px;
+    color:rgb(24, 24, 36);
+}
+.third_line {
+    width: 90%;
+    border: 1px solid rgba(240, 173, 48, 0.733);
+    margin: 16px auto 16px auto;
+    background-color: rgba(173, 216, 230, 0.856);
+    border-radius: 10px;
+    color:rgb(24, 24, 36);
+}
+.submit_line {
+    width: 90%;
+    margin: 16px auto 16px auto;
+}
+.submit_button {
+    background-color: rgb(90, 212, 253);
+    border: 1px solid rgba(240, 173, 48, 0.733);
+    color:rgb(24, 24, 36);
+    line-height: 2;
+    font-size: 14px;
+    border-radius: 20px;
+    padding: 2px 8px 2px 8px;
+}
+.submit_button:hover {
+    background-color: orange;
+    cursor: pointer;
+    color:rgb(24, 24, 36);
+}
+
+.result_box {
+    width: 95%;
+    height: 360px;
+    margin: auto;
+    background-color:rgb(24, 24, 36);
+    border-radius: 20px;
+    border: 1px solid rgba(240, 173, 48, 0.733);
+    box-shadow: 2px 1.5px rgba(10, 10, 10, 0.685);
+    transition: all 1s linear;
+    display: none;
+}
+#result {
+    display: block;
+}
+.first_result{
+    text-align: left;
+}
+.first_result p {
+    font-size: 24px;
+    line-height: 2;
+    margin: 32px;
+    color: rgb(227, 222, 247);
+    border-bottom: 1px solid rgb(227, 222, 247);
+}
+.first_result span{
+    color: rgb(255, 208, 0);
+}
+.second_result{
+    text-align: left;
+}
+.second_result p {
+    font-size: 24px;
+    line-height: 2;
+    margin: 32px;
+    color: rgb(227, 222, 247);
+    border-bottom: 1px solid rgb(227, 222, 247);
+}
+.second_result span{
+    color: rgb(255, 115, 0);
+}
+.back {
+    text-align: left;
+}
+#backbtn {
+    background-color: rgba(226, 241, 255, 0);
+    line-height: 1.5;
+    border: none;
+    color: rgb(227, 222, 247);
+    font-size: 14px;
+    margin-left: 24px;
+}
+#backbtn:hover {
+    color: orange;
+    cursor: pointer;
+}
+#backbtn2 {
+    background-color: rgba(226, 241, 255, 0);
+    line-height: 1.5;
+    border: none;
+    color: rgb(227, 222, 247);
+    font-size: 14px;
+    margin-left: 24px;
+}
+#backbtn2:hover {
+    color: orange;
+    cursor: pointer;
+}

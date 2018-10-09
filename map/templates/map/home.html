@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'map/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'map/style.css' %}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="header">
+            <nav class="class="globalMenuSp"">
+                <ul>
+                    <a href="{% url 'home' %}"><li id="here">e-zone</li></a>
+                    <a href="{% url 'about' %}"><li>about</li></a>
+                    <a href="{% url 'price' %}"><li>price</li></a>
+                    <a href="{% url 'contact' %}"><li>contact</li></a>
+                </ul>
+            </nav>
+    </div>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script>
+    
+    var width = 500,
+    height = 700,
+    margin = 40;
+     
+    var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("margin-top", margin);
+     
+    var color = d3.scale.category20();
+     
+    // 地理座標から画面表示への投影法の設定。
+    var mercator = d3.geo.mercator()
+        .center([ 136.0, 36.2 ])
+        .translate([width/2, height/2])
+        .scale(1500);
+     
+    // geojsonからpath要素を作るための設定。
+    var geopath = d3.geo.path()
+    .projection(mercator);
+     
+    // dataset
+    //var dataset = 
+    var width1 = 400,
+    height1 = 700;
+
+
+
+    // topojsonファイルの読み込み
+    d3.json("{% static 'map/japan.json' %}", function(error, jp) {
+        console.log(jp);
+         
+        // topojsonからgeojsonへの変換。
+        var geoJp = topojson.feature(jp, jp.objects.pref);
+
+        //console.log(geoJp.features);
+        
+        //Title位置を取得
+        var target = document.getElementById("prefecture_title");
+        var image_box = document.getElementById("box_image");
+        var description_box = document.getElementById("description");
+        var option_box = document.getElementById("option_box");
+        var main_box = document.getElementById("main_box");
+
+        //Draw the map
+        svg.selectAll("path")
+            .data(geoJp.features) // geojsonのすべての県の座標データを読み込む。
+          .enter().append("path")
+            //.attr("class", function(d) { console.log(d.properties.name_ja);return d.properties.name_ja; })
+            .attr("d", geopath) // geojsonからpath要素に変換する。
+            .attr("fill", "lightblue")// idがないので、各県の座標リストに基づいて色を変える。
+            .attr("id", function(d){return d.properties.name})
+            .style("stroke", "slategrey")
+            .style("stroke-width", 0.3)
+            .on("mouseover", function() {d3.select(this).attr("fill","orange").attr("cursor", "pointer")})
+            .on("mouseout", function() {d3.select(this).attr("fill", "lightblue").attr("cursor", "initial");})
+            .on("click", function(d) {image_box.style.display = "none"; description_box.style.display = "none"; option_box.style.display = "block"; result_box.style.display = "none";})
+            .on("mouseover", function(d) {target.innerHTML = d.properties.name_ja; d3.select(this).attr("fill","orange").attr("cursor", "pointer")});
+
+    });
+
+    //button function
+    var reloadfunc = function() {
+        location.reload(false); 
+    };
+
+    var removefunc = function() {
+        document.getElementById("option_box").style.display = "none";
+    };
+
+    var showfunc = function() {
+        document.getElementById("result_box").style.display = "block";
+    };
+        
+    //radioボタンの値取得
+    function getRadioValue(){
+        var radio = document.querySelector(".city_name");
+        console.log(radio.value);
+        
+        
+        //csv読み込みからの関数とコード
+        var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成
+        called = radio.value + '.csv';
+        console.log(called);
+        req.open("get", "static/map/"+called, true); // アクセスするファイルを指定
+        req.send(null); // HTTPリクエストの発行
+        
+        // レスポンスが返ってきたらconvertCSVtoArray()を呼ぶ	
+        req.onload = function(){
+        convertCSVtoArray(req.responseText); // 渡されるのは読み込んだCSVデータ
+        }
+    }
+     
+
+
+    // 読み込んだCSVデータを二次元配列に変換する関数convertCSVtoArray()の定義
+    function convertCSVtoArray(str){ // 読み込んだCSVデータが文字列として渡される
+        var result = []; // 最終的な二次元配列を入れるための配列
+        var tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
+
+        // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
+        for(var i=0;i<tmp.length;++i){
+            result[i] = tmp[i].split(',');
+        }
+
+        // each figure input
+        var nissha = parseInt(result[1][2]) + parseInt(result[1][3]) + parseInt(result[1][4]) + parseInt(result[1][5]) + parseInt(result[1][6]) + parseInt(result[1][7]);
+        var kw = document.getElementById("kw").value;
+        var fit = document.getElementById("fit").value;
+
+        // yearly_base result
+        var year_power = nissha * kw;
+        var year_profit = year_power * fit;
+
+        // target var
+        var target_power = document.getElementById("year_power");
+        var target_profit = document.getElementById("year_profit");
+
+        // show calculated result
+        target_power.innerHTML = year_power + "kW";
+        target_profit.innerHTML = year_profit + "円";
+    }
+// END OF SCRIPT ------------------------------------------------            
+    </script>
+
+    <div class="main_box" id="main_box">
+
+        <div class="title">
+            <h1>e-zone</h1>
+        </div>
+        <div class="topic">
+            <h2>太陽光発電量シミュレーション</h2>
+        </div>
+
+        <div class="image_box" >
+            <img src="{% static 'map/ezone.jpg' %}" class="description" id="box_image">
+        </div>
+
+        <div class="prefecture" id="prefecture">
+            <h2 id="prefecture_title">AI×Solar</h2>
+        </div>
+
+    <div class="description" id="description">
+        <div class="service_description">
+            <p>
+                e-zoneは精密なAIの気象データ予測による<br>太陽光発電量予測シミュレーションサービスです。<br>
+                左の地図から都道府県を一つ選択し、エリアを選択後、システム容量と売電価格を入力してください。<br>
+                地域ごとの気象条件に応じて、<br>e-zoneのAIがより正確な年間発電量を予測します。
+            </p>
+        </div>
+        <div>
+                <a href="{% url 'about' %}"><input type="button" value="e-zoneについて" class="submit_button"></a>
+        </div>
+    </div>
+
+    <div class="option_box" id="option_box">
+        <div class="back" >
+            <input type="button" value="←back" onclick="reloadfunc()" id="backbtn">
+        </div>
+        <div class="first_line">
+            {% for miyagi_city in miyagi_cities.all %}
+            <span><input type="radio" value="{{ miyagi_city.city_name }}" id="{{ miyagi_city.city_name }}" class="city_name">{{ miyagi_city.city_name_ja }}</span>
+            {% endfor %}
+        </div>
+        <div class="second_line">
+            <p>
+                システム容量：<input type="text" id="kw">kW
+            </p>
+        </div>
+        <div class="third_line">
+            <p>
+                売電単価：<input type="text" id="fit">円
+            </p>
+        </div>
+        <div class="submit_line">
+            <input class="submit_button" type="button" value="シミュレーションをする" onclick="removefunc();showfunc();getRadioValue();" id="submitbtn">
+        </div>
+    </div>
+
+    <div class="result_box" id="result_box">
+            <div class="back" >
+                <input type="button" value="←back" onclick="reloadfunc()" id="backbtn2">
+            </div>
+            <div class="first_result">
+                <p>
+                    年間発電量：<span id="year_power"></span>
+                </p>
+            </div>
+            <div class="second_result">
+                <p>
+                    年間売電収入：<span id="year_profit"></span>
+                </p>
+            </div>
+            <div class="submit_line">
+                <input class="submit_button" type="button" value="より詳しくみる">
+            </div>
+        </div>
+    
+
+    </div>
+</body>
+</html>
+

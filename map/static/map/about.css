@@ -1,0 +1,101 @@
+body {
+    background-color: rgba(223, 237, 248, 0.541);
+}
+p{
+    font-size: 16px;
+}
+.header ul {
+    width: 100%; 
+    line-height: 40px;
+    border-bottom: 0.5px solid rgb(170, 170, 170);
+    background-color: rgba(143, 222, 253, 0.582);
+    position: relative;
+    text-align: center;
+}
+.header ul li {
+    display: inline; 
+    text-align: center;
+    margin-left: 4%;
+    font-size: 16px;
+    color: rgb(41, 40, 40);
+}
+.header ul li a {
+    font-family: "明朝";
+}
+.header ul li:hover {
+    opacity: 0.6;
+}
+#here {
+    border-bottom: 1px solid rgba(255, 0, 0, 0.575);
+}
+
+.big_box {
+    margin: auto;
+    width: 90%;
+}
+p {
+    line-height: 2;
+    word-spacing: 0.8px;
+    letter-spacing: 0.8px;
+}
+.top_box {
+    width: 100%;
+    text-align: center;
+}
+.top_box img {
+    width: 80%;
+    margin: auto;  
+    position: relative;
+}
+.top_box h3{
+    margin: 24px auto 24px auto;
+    font-size: 32px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 45%;
+    left: 50%;
+    color: orange;
+}
+.top_box p{
+    text-align: left;
+    margin: 24px 16px 16px 16px;
+    line-height: 2;
+    background-color: rgba(255, 186, 82, 0.116);
+    padding: 16px;
+    border-radius: 10px;
+    color: rgba(44, 38, 38, 0.849);
+}
+.about_box {
+    padding: 0px 16px 16px 16px;
+    margin-top: 128px;
+    margin-bottom: 128px;
+    border-top: 1px solid rgba(170, 107, 31, 0.589);
+    border-bottom: 1px solid rgba(170, 107, 31, 0.589);
+}
+.about_box img{
+    width: 40%;
+    display: inline-block;
+    vertical-align: middle;
+}
+.about_box h3{
+    display: inline-block;
+    width: 55%;
+    text-align: center;
+    color: rgba(184, 99, 3, 0.849);
+}
+.about_box p {
+    padding-top: 24px;
+    padding-bottom: 12px;
+    border-top: 1px dashed rgba(128, 128, 128, 0.589);
+    color: rgba(44, 38, 38, 0.849);
+}
+footer div{
+    width: 100%; 
+    line-height: 40px;
+    background-color: rgba(143, 222, 253, 0.582);
+    text-align: center;
+}
+footer p{
+    font-size: 14px;
+    color: rgb(41, 40, 40);
+}
