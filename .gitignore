@@ -1,1 +1,6 @@
 e_zone/settings.py
+__pycache__/
+*.log
+*.pot
+*.__pycache__
+/media
