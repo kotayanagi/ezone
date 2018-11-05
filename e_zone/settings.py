@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'e_zone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'e_zone_db',
+        'NAME': 'ezone_database',
         'USER': 'kotayanagi',
-        'PASSWORD': 'Popcorn0875',
+        'PASSWORD': '****',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -129,6 +129,6 @@ MEDIA_URL = '/media/'
 
 
 try:
-    from settings.py import *
+    from .local_settings import *
 except ImportError:
     pass
