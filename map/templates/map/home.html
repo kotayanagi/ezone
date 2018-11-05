@@ -7,158 +7,94 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="{% static 'map/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'map/style.css' %}">
-    <title>Document</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="{% static 'map/jquery-3.3.1.min.js' %}"></script>
+    <title>e-zone 太陽光発電＆災害シミュレーター</title>
+    <script>
+    
+    </script>
 </head>
 
 <body>
 
+
+
+        
     <div class="header">
             <nav class="class="globalMenuSp"">
                 <ul>
                     <a href="{% url 'home' %}"><li id="here">e-zone</li></a>
                     <a href="{% url 'about' %}"><li>about</li></a>
-                    <a href="{% url 'price' %}"><li>price</li></a>
                     <a href="{% url 'contact' %}"><li>contact</li></a>
                 </ul>
             </nav>
     </div>
 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script>
     
-    var width = 500,
-    height = 700,
-    margin = 40;
-     
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("margin-top", margin);
-     
-    var color = d3.scale.category20();
-     
-    // 地理座標から画面表示への投影法の設定。
-    var mercator = d3.geo.mercator()
-        .center([ 136.0, 36.2 ])
-        .translate([width/2, height/2])
-        .scale(1500);
-     
-    // geojsonからpath要素を作るための設定。
-    var geopath = d3.geo.path()
-    .projection(mercator);
-     
-    // dataset
-    //var dataset = 
-    var width1 = 400,
-    height1 = 700;
-
-
-
-    // topojsonファイルの読み込み
-    d3.json("{% static 'map/japan.json' %}", function(error, jp) {
-        console.log(jp);
-         
-        // topojsonからgeojsonへの変換。
-        var geoJp = topojson.feature(jp, jp.objects.pref);
-
-        //console.log(geoJp.features);
+<div id="s_map"></div>
+<div class="visual" id="visual">
+        <a href="{% url 'home' %}" class="topbtn">TOP</a>
+    <div class="visual1" id="visual1">
+    <div id="svg_graph">
+            <div class="visual_box">
+                <div class="graph_title"><span>-過去２０年間の風速データ-</span></div>
+            <div class="graph_head">
+                <h6 id="numT1"></h6>
+                <p id = "num1"></p>
+            </div>
+            <div class="graph_head">
+                <h6 id="numT2"></h6>
+                <p id = "num2"></p>
+            </div>
+            <div class="graph_head">
+                <h6 id="numT3"></h6>
+                <p id = "num3"></p>
+            </div></div>
         
-        //Title位置を取得
-        var target = document.getElementById("prefecture_title");
-        var image_box = document.getElementById("box_image");
-        var description_box = document.getElementById("description");
-        var option_box = document.getElementById("option_box");
-        var main_box = document.getElementById("main_box");
+    </div>
+    <div id="svg_line" class="svg_line">
+            <div class="graph_title"><span>-35m/s以上の風速出現傾向-</span></div>
+    </div>
+    <div id="svg_risk1" class="svg_risk">
+            <div class="graph_title"><span>-発電所の災害リスク-</span></div>
+    </div>
+    <div id="all_result" class="all_result">
+            <div class="all_result_title">
+                <div class="suggestion_div"><span id="suggestion1"></span></div>
+                <span id="suggestion2"></span>
+                <a><p id="check_price">見積もりをする</p></a>
+                <a><p id="buy_power">発電所の売買を行う</p></a>
+            </div>
+    </div>
+</div>
 
-        //Draw the map
-        svg.selectAll("path")
-            .data(geoJp.features) // geojsonのすべての県の座標データを読み込む。
-          .enter().append("path")
-            //.attr("class", function(d) { console.log(d.properties.name_ja);return d.properties.name_ja; })
-            .attr("d", geopath) // geojsonからpath要素に変換する。
-            .attr("fill", "lightblue")// idがないので、各県の座標リストに基づいて色を変える。
-            .attr("id", function(d){return d.properties.name})
-            .style("stroke", "slategrey")
-            .style("stroke-width", 0.3)
-            .on("mouseover", function() {d3.select(this).attr("fill","orange").attr("cursor", "pointer")})
-            .on("mouseout", function() {d3.select(this).attr("fill", "lightblue").attr("cursor", "initial");})
-            .on("click", function(d) {image_box.style.display = "none"; description_box.style.display = "none"; option_box.style.display = "block"; result_box.style.display = "none";})
-            .on("mouseover", function(d) {target.innerHTML = d.properties.name_ja; d3.select(this).attr("fill","orange").attr("cursor", "pointer")});
+<div class="visual2" id="visual2">
+    <div class="pref_title_box" id="pref_title_id">
 
-    });
-
-    //button function
-    var reloadfunc = function() {
-        location.reload(false); 
-    };
-
-    var removefunc = function() {
-        document.getElementById("option_box").style.display = "none";
-    };
-
-    var showfunc = function() {
-        document.getElementById("result_box").style.display = "block";
-    };
-        
-    //radioボタンの値取得
-    function getRadioValue(){
-        var radio = document.querySelector(".city_name");
-        console.log(radio.value);
-        
-        
-        //csv読み込みからの関数とコード
-        var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成
-        called = radio.value + '.csv';
-        console.log(called);
-        req.open("get", "static/map/"+called, true); // アクセスするファイルを指定
-        req.send(null); // HTTPリクエストの発行
-        
-        // レスポンスが返ってきたらconvertCSVtoArray()を呼ぶ	
-        req.onload = function(){
-        convertCSVtoArray(req.responseText); // 渡されるのは読み込んだCSVデータ
-        }
-    }
-     
+    </div>
+    <div id="svg_nissha" class="nissha_title">
+        <div class="graph_title"><span>-20年間の日射量予測-</span></div>
+    </div>
+    <div class="svg_nissha"><span id="nissha_graph"></span></div>
+    <div class="profit20_title"><span>-20年間の予測合計売電収入-</span>
+    <p id="calc_profit"></p>
+    </div>
+    <div class="ad_image_box"><a href="">
+        <img src="{% static 'map/ezone.jpg' %}" class="ad_image" id="ad_image">
+    </a></div>
+</div>
+</div>
 
 
-    // 読み込んだCSVデータを二次元配列に変換する関数convertCSVtoArray()の定義
-    function convertCSVtoArray(str){ // 読み込んだCSVデータが文字列として渡される
-        var result = []; // 最終的な二次元配列を入れるための配列
-        var tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
-
-        // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
-        for(var i=0;i<tmp.length;++i){
-            result[i] = tmp[i].split(',');
-        }
-
-        // each figure input
-        var nissha = parseInt(result[1][2]) + parseInt(result[1][3]) + parseInt(result[1][4]) + parseInt(result[1][5]) + parseInt(result[1][6]) + parseInt(result[1][7]);
-        var kw = document.getElementById("kw").value;
-        var fit = document.getElementById("fit").value;
-
-        // yearly_base result
-        var year_power = nissha * kw;
-        var year_profit = year_power * fit;
-
-        // target var
-        var target_power = document.getElementById("year_power");
-        var target_profit = document.getElementById("year_profit");
-
-        // show calculated result
-        target_power.innerHTML = year_power + "kW";
-        target_profit.innerHTML = year_profit + "円";
-    }
-// END OF SCRIPT ------------------------------------------------            
-    </script>
-
+    
     <div class="main_box" id="main_box">
 
         <div class="title">
             <h1>e-zone</h1>
         </div>
         <div class="topic">
-            <h2>太陽光発電量シミュレーション</h2>
+            <h2>太陽光発電＆災害シミュレーション</h2>
         </div>
 
         <div class="image_box" >
@@ -172,9 +108,9 @@
     <div class="description" id="description">
         <div class="service_description">
             <p>
-                e-zoneは精密なAIの気象データ予測による<br>太陽光発電量予測シミュレーションサービスです。<br>
+                e-zoneは精密な気象データ解析による<br>太陽光発電量＆災害シミュレーションサービスです。<br>
                 左の地図から都道府県を一つ選択し、エリアを選択後、システム容量と売電価格を入力してください。<br>
-                地域ごとの気象条件に応じて、<br>e-zoneのAIがより正確な年間発電量を予測します。
+                地域ごとの気象条件に応じて、<br>正確な年間発電量や災害リスクを予測します。
             </p>
         </div>
         <div>
@@ -184,49 +120,877 @@
 
     <div class="option_box" id="option_box">
         <div class="back" >
-            <input type="button" value="←back" onclick="reloadfunc()" id="backbtn">
+            <input type="button" value="←back" id="backbtn">
         </div>
         <div class="first_line">
-            {% for miyagi_city in miyagi_cities.all %}
-            <span><input type="radio" value="{{ miyagi_city.city_name }}" id="{{ miyagi_city.city_name }}" class="city_name">{{ miyagi_city.city_name_ja }}</span>
+
+            
+            <select class="select" name="select" id="Hokkaidō_pref">
+            {% for hokkaido_city in hokkaido_cities.all %}
+            <span><option name="city" value="{{ hokkaido_city.city_name }}" id="{{ hokkaido_city.city_name_ja }}" class="city_name"><label for="{{ hokkaido_city.city_name }}">{{ hokkaido_city.city_name_ja }}</label></span>
             {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Aomori_pref">
+            {% for aomori_city in aomori_cities.all %}
+            <span><option name="city" value="{{ aomori_city.city_name }}" id="{{ aomori_city.city_name_ja }}" class="city_name"><label for="{{ aomori_city.city_name }}">{{ aomori_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Akita_pref">
+            {% for akita_city in akita_cities.all %}
+            <span><option name="city" value="{{ akita_city.city_name }}" id="{{ akita_city.city_name_ja }}" class="city_name"><label for="{{ akita_city.city_name }}">{{ akita_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Iwate_pref">
+            {% for iwate_city in iwate_cities.all %}
+            <span><option name="city" value="{{ iwate_city.city_name }}" id="{{ iwate_city.city_name_ja }}" class="city_name"><label for="{{ iwate_city.city_name }}">{{ iwate_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Miyagi_pref">
+            {% for miyagi_city in miyagi_cities.all %}
+            <span><option name="city" value="{{ miyagi_city.city_name }}" id="{{ miyagi_city.city_name_ja }}" class="city_name"><label for="{{ miyagi_city.city_name }}">{{ miyagi_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Yamagata_pref">
+            {% for yamagata_city in yamagata_cities.all %}
+            <span><option name="city" value="{{ yamagata_city.city_name }}" id="{{ yamagata_city.city_name_ja }}" class="city_name"><label for="{{ yamagata_city.city_name }}">{{ yamagata_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Fukushima_pref">
+            {% for fukushima_city in fukushima_cities.all %}
+            <span><option name="city" value="{{ fukushima_city.city_name }}" id="{{ fukushima_city.city_name_ja }}" class="city_name"><label for="{{ fukushima_city.city_name }}">{{ fukushima_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Niigata_pref">
+            {% for niigata_city in niigata_cities.all %}
+            <span><option name="city" value="{{ niigata_city.city_name }}" id="{{ niigata_city.city_name_ja }}" class="city_name"><label for="{{ niigata_city.city_name }}">{{ niigata_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Saitama_pref">
+            {% for saitama_city in saitama_cities.all %}
+            <span><option name="city" value="{{ saitama_city.city_name }}" id="{{ saitama_city.city_name_ja }}" class="city_name"><label for="{{ saitama_city.city_name }}">{{ saitama_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Gunma_pref">
+            {% for gunma_city in gunma_cities.all %}
+            <span><option name="city" value="{{ gunma_city.city_name }}" id="{{ gunma_city.city_name_ja }}" class="city_name"><label for="{{ gunma_city.city_name }}">{{ gunma_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Ibaraki_pref">
+            {% for ibaraki_city in ibaraki_cities.all %}
+            <span><option name="city" value="{{ ibaraki_city.city_name }}" id="{{ ibaraki_city.city_name_ja }}" class="city_name"><label for="{{ ibaraki_city.city_name }}">{{ ibaraki_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Chiba_pref">
+            {% for chiba_city in chiba_cities.all %}
+            <span><option name="city" value="{{ chiba_city.city_name }}" id="{{ chiba_city.city_name_ja }}" class="city_name"><label for="{{ chiba_city.city_name }}">{{ chiba_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Tokyo_pref">
+            {% for tokyo_city in tokyo_cities.all %}
+            <span><option name="city" value="{{ tokyo_city.city_name }}" id="{{ tokyo_city.city_name_ja }}" class="city_name"><label for="{{ tokyo_city.city_name }}">{{ tokyo_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Kanagawa_pref">
+            {% for kanagawa_city in kanagawa_cities.all %}
+            <span><option name="city" value="{{ kanagawa_city.city_name }}" id="{{ kanagawa_city.city_name_ja }}" class="city_name"><label for="{{ kanagawa_city.city_name }}">{{ kanagawa_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Shizuoka_pref">
+            {% for shizuoka_city in shizuoka_cities.all %}
+            <span><option name="city" value="{{ shizuoka_city.city_name }}" id="{{ shizuoka_city.city_name_ja }}" class="city_name"><label for="{{ shizuoka_city.city_name }}">{{ shizuoka_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+            
+            <select class="select" name="select" id="Nagano_pref">
+            {% for nagano_city in nagano_cities.all %}
+            <span><option name="city" value="{{ nagano_city.city_name }}" id="{{ nagano_city.city_name_ja }}" class="city_name"><label for="{{ nagano_city.city_name }}">{{ nagano_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Yamanashi_pref">
+            {% for yamanashi_city in yamanashi_cities.all %}
+            <span><option name="city" value="{{ yamanashi_city.city_name }}" id="{{ yamanashi_city.city_name_ja }}" class="city_name"><label for="{{ yamanashi_city.city_name }}">{{ yamanashi_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Tochigi_pref">
+            {% for tochigi_city in tochigi_cities.all %}
+            <span><option name="city" value="{{ tochigi_city.city_name }}" id="{{ tochigi_city.city_name_ja }}" class="city_name"><label for="{{ tochigi_city.city_name }}">{{ tochigi_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Ishikawa_pref">
+            {% for ishikawa_city in ishikawa_cities.all %}
+            <span><option name="city" value="{{ ishikawa_city.city_name }}" id="{{ ishikawa_city.city_name_ja }}" class="city_name"><label for="{{ ishikawa_city.city_name }}">{{ ishikawa_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Aichi_pref">
+            {% for aichi_city in aichi_cities.all %}
+            <span><option name="city" value="{{ aichi_city.city_name }}" id="{{ aichi_city.city_name_ja }}" class="city_name"><label for="{{ aichi_city.city_name }}">{{ aichi_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Toyama_pref">
+            {% for toyama_city in toyama_cities.all %}
+            <span><option name="city" value="{{ toyama_city.city_name }}" id="{{ toyama_city.city_name_ja }}" class="city_name"><label for="{{ toyama_city.city_name }}">{{ toyama_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Gifu_pref">
+            {% for gifu_city in gifu_cities.all %}
+            <span><option name="city" value="{{ gifu_city.city_name }}" id="{{ gifu_city.city_name_ja }}" class="city_name"><label for="{{ gifu_city.city_name }}">{{ gifu_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Fukui_pref">
+            {% for fukui_city in fukui_cities.all %}
+            <span><option name="city" value="{{ fukui_city.city_name }}" id="{{ fukui_city.city_name_ja }}" class="city_name"><label for="{{ fukui_city.city_name }}">{{ fukui_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Kyōto_pref">
+            {% for kyoto_city in kyoto_cities.all %}
+            <span><option name="city" value="{{ kyoto_city.city_name }}" id="{{ kyoto_city.city_name_ja }}" class="city_name"><label for="{{ kyoto_city.city_name }}">{{ kyoto_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Mie_pref">
+            {% for mie_city in mie_cities.all %}
+            <span><option name="city" value="{{ mie_city.city_name }}" id="{{ mie_city.city_name_ja }}" class="city_name"><label for="{{ mie_city.city_name }}">{{ mie_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Ōsaka_pref">
+            {% for osaka_city in osaka_cities.all %}
+            <span><option name="city" value="{{ osaka_city.city_name }}" id="{{ osaka_city.city_name_ja }}" class="city_name"><label for="{{ osaka_city.city_name }}">{{ osaka_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Shiga_pref">
+            {% for shiga_city in shiga_cities.all %}
+            <span><option name="city" value="{{ shiga_city.city_name }}" id="{{ shiga_city.city_name_ja }}" class="city_name"><label for="{{ shiga_city.city_name }}">{{ shiga_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Nara_pref">
+            {% for nara_city in nara_cities.all %}
+            <span><option name="city" value="{{ nara_city.city_name }}" id="{{ nara_city.city_name_ja }}" class="city_name"><label for="{{ nara_city.city_name }}">{{ nara_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Wakayama_pref">
+            {% for wakayama_city in wakayama_cities.all %}
+            <span><option name="city" value="{{ wakayama_city.city_name }}" id="{{ wakayama_city.city_name_ja }}" class="city_name"><label for="{{ wakayama_city.city_name }}">{{ wakayama_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Hyōgo_pref">
+            {% for hyogo_city in hyogo_cities.all %}
+            <span><option name="city" value="{{ hyogo_city.city_name }}" id="{{ hyogo_city.city_name_ja }}" class="city_name"><label for="{{ hyogo_city.city_name }}">{{ hyogo_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Tottori_pref">
+            {% for tottori_city in tottori_cities.all %}
+            <span><option name="city" value="{{ tottori_city.city_name }}" id="{{ tottori_city.city_name_ja }}" class="city_name"><label for="{{ tottori_city.city_name }}">{{ tottori_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Okayama_pref">
+            {% for okayama_city in okayama_cities.all %}
+            <span><option name="city" value="{{ okayama_city.city_name }}" id="{{ okayama_city.city_name_ja }}" class="city_name"><label for="{{ okayama_city.city_name }}">{{ okayama_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+            
+            <select class="select" name="select" id="Hiroshima_pref">
+            {% for hiroshima_city in hiroshima_cities.all %}
+            <span><option name="city" value="{{ hiroshima_city.city_name }}" id="{{ hiroshima_city.city_name_ja }}" class="city_name"><label for="{{ hiroshima_city.city_name }}">{{ hiroshima_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Shimane_pref">
+            {% for shimane_city in shimane_cities.all %}
+            <span><option name="city" value="{{ shimane_city.city_name }}" id="{{ shimane_city.city_name_ja }}" class="city_name"><label for="{{ shimane_city.city_name }}">{{ shimane_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Yamaguchi_pref">
+            {% for yamaguchi_city in yamaguchi_cities.all %}
+            <span><option name="city" value="{{ yamaguchi_city.city_name }}" id="{{ yamaguchi_city.city_name }}" class="city_name"><label for="{{ yamaguchi_city.city_name }}">{{ yamaguchi_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Tokushima_pref">
+            {% for tokushima_city in tokushima_cities.all %}
+            <span><option name="city" value="{{ tokushima_city.city_name }}" id="{{ tokushima_city.city_name_ja }}" class="city_name"><label for="{{ tokushima_city.city_name }}">{{ tokushima_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Kochi_pref">
+            {% for kochi_city in kochi_cities.all %}
+            <span><option name="city" value="{{ kochi_city.city_name }}" id="{{ kochi_city.city_name_ja }}" class="city_name"><label for="{{ kochi_city.city_name }}">{{ kochi_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Ehime_pref">
+            {% for ehime_city in ehime_cities.all %}
+            <span><option name="city" value="{{ ehime_city.city_name }}" id="{{ ehime_city.city_name_ja }}" class="city_name"><label for="{{ ehime_city.city_name }}">{{ ehime_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Kagawa_pref">
+            {% for kagawa_city in kagawa_cities.all %}
+            <span><option name="city" value="{{ kagawa_city.city_name }}" id="{{ kagawa_city.city_name_ja }}" class="city_name"><label for="{{ kagawa_city.city_name }}">{{ kagawa_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Saga_pref">
+            {% for saga_city in saga_cities.all %}
+            <span><option name="city" value="{{ saga_city.city_name }}" id="{{ saga_city.city_name_ja }}" class="city_name"><label for="{{ saga_city.city_name }}">{{ saga_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Nagasaki_pref">
+            {% for nagasaki_city in nagasaki_cities.all %}
+            <span><option name="city" value="{{ nagasaki_city.city_name }}" id="{{ nagasaki_city.city_name_ja }}" class="city_name"><label for="{{ nagasaki_city.city_name }}">{{ nagasaki_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Fukuoka_pref">
+            {% for fukuoka_city in fukuoka_cities.all %}
+            <span><option name="city" value="{{ fukuoka_city.city_name }}" id="{{ fukuoka_city.city_name_ja }}" class="city_name"><label for="{{ fukuoka_city.city_name }}">{{ fukuoka_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Ōita_pref">
+            {% for oita_city in oita_cities.all %}
+            <span><option name="city" value="{{ oita_city.city_name }}" id="{{ oita_city.city_name_ja }}" class="city_name"><label for="{{ oita_city.city_name }}">{{ oita_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Kumamoto_pref">
+            {% for kumamoto_city in kumamoto_cities.all %}
+            <span><option name="city" value="{{ kumamoto_city.city_name }}" id="{{ kumamoto_city.city_name_ja }}" class="city_name"><label for="{{ kumamoto_city.city_name }}">{{ kumamoto_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Miyazaki_pref">
+            {% for miyazaki_city in miyazaki_cities.all %}
+            <span><option name="city" value="{{ miyazaki_city.city_name }}" id="{{ miyazaki_city.city_name_ja }}" class="city_name"><label for="{{ miyazaki_city.city_name }}">{{ miyazaki_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Kagoshima_pref">
+            {% for kagoshima_city in kagoshima_cities.all %}
+            <span><option name="city" value="{{ kagoshima_city.city_name }}" id="{{ kagoshima_city.city_name_ja }}" class="city_name"><label for="{{ kagoshima_city.city_name }}">{{ kagoshima_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+            <select class="select" name="select" id="Okinawa_pref">
+            {% for okinawa_city in okinawa_cities.all %}
+            <span><option name="city" value="{{ okinawa_city.city_name }}" id="{{ okinawa_city.city_name_ja }}" class="city_name"><label for="{{ okinawa_city.city_name }}">{{ okinawa_city.city_name_ja }}</label></span>
+            {% endfor %}
+            </select>
+
+
+
         </div>
         <div class="second_line">
             <p>
-                システム容量：<input type="text" id="kw">kW
+                システム容量：<input type="number" id="kw" required style="line-height:2">kW
             </p>
         </div>
         <div class="third_line">
             <p>
-                売電単価：<input type="text" id="fit">円
+                売電単価：<input type="number" id="fit" placeholder="0" style="line-height:2">円
             </p>
         </div>
         <div class="submit_line">
-            <input class="submit_button" type="button" value="シミュレーションをする" onclick="removefunc();showfunc();getRadioValue();" id="submitbtn">
+            <input class="submit_button" type="submit" value="シミュレーションをする" id="submitbtn">
         </div>
+     
     </div>
 
     <div class="result_box" id="result_box">
             <div class="back" >
-                <input type="button" value="←back" onclick="reloadfunc()" id="backbtn2">
+                <input type="button" value="←back" id="backbtn2">
             </div>
             <div class="first_result">
                 <p>
-                    年間発電量：<span id="year_power"></span>
+                    年間日射量：<br><span id="year_nissha"></span>
                 </p>
             </div>
             <div class="second_result">
                 <p>
-                    年間売電収入：<span id="year_profit"></span>
+                    年間発電量：<br><span id="year_power"></span>
+                </p>
+            </div>
+
+            <div class="third_result">
+                <p>
+                    年間売電収入：<br><span id="year_profit"></span>
                 </p>
             </div>
             <div class="submit_line">
-                <input class="submit_button" type="button" value="より詳しくみる">
+                <input class="submit_button" type="button" value="災害リスクを測定" id="submitbtn2">
             </div>
+            
         </div>
     
 
     </div>
+    <script>
+    
+        var width = 500,
+        height = 700,
+        margin = 40;
+         
+        var svg = d3.select("#s_map").append("svg") //bodyをdivに変えて、下記のidで指定する
+        .attr("width", width)
+        .attr("height", height)
+        .attr("margin-top", margin)
+        .attr("id", "svg_map");
+         
+        var color = d3.scale.category20();
+         
+        // 地理座標から画面表示への投影法の設定。
+        var mercator = d3.geo.mercator()
+            .center([ 136.0, 36.2 ])
+            .translate([width/2, height/2])
+            .scale(1500);
+         
+        // geojsonからpath要素を作るための設定。
+        var geopath = d3.geo.path()
+        .projection(mercator);
+         
+        // dataset
+        //var dataset = 
+        var width1 = 400,
+        height1 = 700;
+    
+    
+    
+        // topojsonファイルの読み込み
+        d3.json("{% static 'map/japan.json' %}", function(error, jp) {
+            console.log(jp);
+             
+            // topojsonからgeojsonへの変換。
+            var geoJp = topojson.feature(jp, jp.objects.pref);
+    
+            //console.log(geoJp.features);
+            
+            //Title位置を取得
+            var target = document.getElementById("prefecture_title");
+            var image_box = document.getElementById("box_image");
+            var description_box = document.getElementById("description");
+            var option_box = document.getElementById("option_box");
+            var main_box = document.getElementById("main_box");
+    
+            //Draw the map
+            svg.selectAll("path")
+                .data(geoJp.features) // geojsonのすべての県の座標データを読み込む。
+              .enter().append("path")
+                //.attr("class", function(d) { console.log(d.properties.name_ja);return d.properties.name_ja; })
+                .attr("d", geopath) // geojsonからpath要素に変換する。
+                .attr("fill", "lightblue")// idがないので、各県の座標リストに基づいて色を変える。
+                .attr("id", function(d){return d.properties.name})
+                .style("stroke", "slategrey")
+                .style("stroke-width", 0.3)
+                .on("mouseover", function() {d3.select(this).attr("fill","orange").attr("cursor", "pointer")})
+                .on("mouseout", function() {d3.select(this).attr("fill", "lightblue").attr("cursor", "initial");})
+                .on("click", function(d) {
+                    try {
+                    if (selected_pref.style.display = "block"){
+                        selected_pref.style.display = "none";
+                    };} catch(e){};
+                    console.log(d.properties.name);
+                    result_box.style.display = "none";
+                    var select_id=this.id + "_pref";
+                    selected_pref = document.getElementById(select_id);
+                    //selected_pref.style.display = "none";
+                    image_box.style.display = "none"; 
+                    description_box.style.display = "none";
+                    //setTimeout(function(){
+                    option_box.style.display = "block"; 
+                    selected_pref.style.display = "block";
+                    pref_name = d.properties.name_ja;
+                    console.log(selected_pref);
+                    console.log(this);
+                    console.log(select_id);
+                    })
+                .on("mouseover", function(d) {
+                    target.innerHTML = d.properties.name_ja;
+                    d3.select(this).attr("fill","orange").attr("cursor", "pointer")
+                    });
+    
+        });
+    
+        
+        //button function
+        $("#backbtn").click(function(){
+            location.reload(false);
+        });
+
+        $("#backbtn2").click(function(){
+            location.reload(false);
+        });
+
+        $("#submitbtn").click(function(){
+            document.getElementById("option_box").style.display = "none";
+            selected_pref.style.display = "none";
+            document.getElementById("result_box").style.display = "block";
+            document.getElementById("year_nissha").style.display = "none";
+            document.getElementById("year_power").style.display = "none";
+            document.getElementById("year_profit").style.display = "none";
+            $("#year_nissha").delay(500).fadeIn(800);
+            $("#year_power").delay(500).fadeIn(800);
+            $("#year_profit").delay(500).fadeIn(800);
+
+            var elements = selected_pref.options;
+    
+            for (var i=0;i<elements.length;i++){
+                if (elements[i].selected){
+                    var city = elements[i];
+                    console.log(city);
+                    japa_name = city.id;
+                };
+            };
+            console.log(city.value);
+
+             //csv読み込みからの関数とコード
+            
+            var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成
+            var city_data = city.value + '.csv';
+            console.log(city.value);
+            var city_wind_data = city.value + "_w.json";
+            var city_tendency_data = city.value+"_w_tendency.json";
+            
+        
+            req.open("get", "media/data/"+city_data, true); // アクセスするファイルを指定
+            req.send(null); // HTTPリクエストの発行
+            
+            // レスポンスが返ってきたらconvertCSVtoArray()を呼ぶ	
+            req.onload = function(){
+            convertCSVtoArray(req.responseText); // 渡されるのは読み込んだCSVデータ
+            };
+            
+      
+        
+    
+         
+        // 読み込んだCSVデータを二次元配列に変換する関数convertCSVtoArray()の定義
+        function convertCSVtoArray(str){ 
+            var result = []; 
+            var tmp = str.split("\n"); // 配列を生成
+    
+            // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
+            for(var i=0;i<tmp.length;++i){
+                result[i] = tmp[i].split(',');
+            }
+    
+            // each figure input
+            nissha_list = [
+                parseInt(result[2][1]) + parseInt(result[2][2]) + parseInt(result[2][3]) + parseInt(result[2][4]) + parseInt(result[2][5]) + parseInt(result[2][6]),
+                parseInt(result[3][1]) + parseInt(result[3][2]) + parseInt(result[3][3]) + parseInt(result[3][4]) + parseInt(result[3][5]) + parseInt(result[3][6]),
+                parseInt(result[4][1]) + parseInt(result[4][2]) + parseInt(result[4][3]) + parseInt(result[4][4]) + parseInt(result[4][5]) + parseInt(result[4][6]),
+                parseInt(result[5][1]) + parseInt(result[5][2]) + parseInt(result[5][3]) + parseInt(result[5][4]) + parseInt(result[5][5]) + parseInt(result[5][6]),
+                parseInt(result[6][1]) + parseInt(result[6][2]) + parseInt(result[6][3]) + parseInt(result[6][4]) + parseInt(result[6][5]) + parseInt(result[6][6]),
+                parseInt(result[7][1]) + parseInt(result[7][2]) + parseInt(result[7][3]) + parseInt(result[7][4]) + parseInt(result[7][5]) + parseInt(result[7][6]),
+                parseInt(result[8][1]) + parseInt(result[8][2]) + parseInt(result[8][3]) + parseInt(result[8][4]) + parseInt(result[8][5]) + parseInt(result[8][6]),
+                parseInt(result[9][1]) + parseInt(result[9][2]) + parseInt(result[9][3]) + parseInt(result[9][4]) + parseInt(result[9][5]) + parseInt(result[9][6]),
+                parseInt(result[10][1]) + parseInt(result[10][2]) + parseInt(result[10][3]) + parseInt(result[10][4]) + parseInt(result[10][5]) + parseInt(result[10][6]),
+                parseInt(result[11][1]) + parseInt(result[11][2]) + parseInt(result[11][3]) + parseInt(result[11][4]) + parseInt(result[11][5]) + parseInt(result[11][6]),
+                parseInt(result[12][1]) + parseInt(result[12][2]) + parseInt(result[12][3]) + parseInt(result[12][4]) + parseInt(result[12][5]) + parseInt(result[12][6]),
+                parseInt(result[13][1]) + parseInt(result[13][2]) + parseInt(result[13][3]) + parseInt(result[13][4]) + parseInt(result[13][5]) + parseInt(result[13][6]),
+                parseInt(result[14][1]) + parseInt(result[14][2]) + parseInt(result[14][3]) + parseInt(result[14][4]) + parseInt(result[14][5]) + parseInt(result[14][6]),
+                parseInt(result[15][1]) + parseInt(result[15][2]) + parseInt(result[15][3]) + parseInt(result[15][4]) + parseInt(result[15][5]) + parseInt(result[15][6]),
+                parseInt(result[16][1]) + parseInt(result[16][2]) + parseInt(result[16][3]) + parseInt(result[16][4]) + parseInt(result[16][5]) + parseInt(result[16][6]),
+                parseInt(result[17][1]) + parseInt(result[17][2]) + parseInt(result[17][3]) + parseInt(result[17][4]) + parseInt(result[17][5]) + parseInt(result[17][6]),
+                parseInt(result[18][1]) + parseInt(result[18][2]) + parseInt(result[18][3]) + parseInt(result[18][4]) + parseInt(result[18][5]) + parseInt(result[18][6]),
+                parseInt(result[19][1]) + parseInt(result[19][2]) + parseInt(result[19][3]) + parseInt(result[19][4]) + parseInt(result[19][5]) + parseInt(result[19][6]),
+                parseInt(result[20][1]) + parseInt(result[20][2]) + parseInt(result[20][3]) + parseInt(result[20][4]) + parseInt(result[20][5]) + parseInt(result[20][6]),
+                parseInt(result[21][1]) + parseInt(result[21][2]) + parseInt(result[21][3]) + parseInt(result[21][4]) + parseInt(result[21][5]) + parseInt(result[21][6])
+            ];
+            var nissha = parseInt(result[1][1]) + parseInt(result[1][2]) + parseInt(result[1][3]) + parseInt(result[1][4]) + parseInt(result[1][5]) + parseInt(result[1][6]);
+            var kw = document.getElementById("kw").value;
+            var fit = document.getElementById("fit").value;
+            console.log(nissha_list);
+    
+            // yearly_base result
+            var year_nissha = Math.min.apply(null,nissha_list) + "~" + Math.max.apply(null,nissha_list);
+            var year_power = Math.min.apply(null,nissha_list) * kw + "~" + Math.max.apply(null,nissha_list) * kw;
+            var year_profit = Math.min.apply(null,nissha_list) * kw * fit + "~" + Math.max.apply(null,nissha_list) * kw * fit;
+    
+            // target var
+            var target_nissha = document.getElementById("year_nissha");
+            var target_power = document.getElementById("year_power");
+            var target_profit = document.getElementById("year_profit");
+    
+            // show calculated result
+            target_nissha.innerHTML = year_nissha + " (kWh/m2)";
+            target_power.innerHTML = year_power + " (kW)";
+            target_profit.innerHTML = year_profit + " (円)";
+        };
+    
+    $("#submitbtn2").click(function(){
+        document.getElementById("s_map").style.display = "none";
+        document.getElementById("main_box").style.display = "none";
+        document.getElementById("visual").style.display = "block";
+        document.getElementById("all_result").style.display = "none";
+    });
+
+        // show svg_graph here
+        var margin = {top: 10, right: 20, bottom: 30, left: 40};
+                
+        // スケールと出力レンジの定義
+        var x = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .1);
+     
+        var y = d3.scale.linear()
+                .range([height/5, 0]);
+     
+        // 軸の定義
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+     
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .ticks(10)
+     
+        // svgの定義
+        var svg_graph = d3.select("#svg_graph").append("svg")
+                .attr("width", width)
+                .attr("height", 200)
+                .append("g")
+                .attr("transform", "translate(30,10)")
+                .attr("id", "svg_graph");
+
+        // データを読み込む
+        d3.json("media/data/" + city_wind_data, function(error, data_w) {
+            // データを入力ドメインとして設定
+            x.domain(data_w.map(function(d) {  console.log(d.name);return d.name;}));
+            y.domain([0, 20]);
+            console.log(data_w);
+
+        
+    $("#submitbtn2").click(function(){
+        var numT1 = document.getElementById("numT1");
+        var numT2 = document.getElementById("numT2");
+        var numT3 = document.getElementById("numT3");
+        var num1 = document.getElementById("num1");
+        var num2 = document.getElementById("num2");
+        var num3 = document.getElementById("num3");
+
+        
+        numT1.innerHTML = data_w[0].name;
+        num1.innerHTML = data_w[0].number;
+        numT2.innerHTML = data_w[1].name;
+        num2.innerHTML = data_w[1].number;
+        numT3.innerHTML = data_w[2].name;
+        num3.innerHTML = data_w[2].number;
+
+      
+        $("#num1").delay(200).fadeTo(600,1);
+        $("#num2").delay(200).fadeTo(600,1);
+        $("#num3").delay(200).fadeTo(600,1);
+        
+        var target = document.getElementById("pref_title_id");
+        target.innerHTML = pref_name + " " + japa_name;
+    
+
+
+            // x軸をsvgに表示
+            svg_graph.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(30,30)")
+                    .call(xAxis)
+                    .attr("font-size", "14px")
+                    .attr("text-anchor", "middle")
+                    .text("過去２０年間の各基準風速を超えた回数");;
+     
+            // y軸をsvgに表示
+            svg_graph.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis)
+                    .append("text")
+                    .attr("transform", "rotate(90)")
+                    .attr("y", 3)
+                    .attr("font-size", "12px")
+                    .attr("dy", ".1em")
+                    .style("fill", "ivory")
+                    .style("text-anchor", "end");
+     
+            // 棒グラフを表示
+            svg_graph.selectAll(".bar")
+                    .data(data_w)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("fill", "lightblue")
+                    .style("opacity","0.85")
+                    .attr("color", "ivory")
+                    .attr("x", function(d) { return x(d.name); })
+                    .attr("width", "26px")
+                    .attr("y", function(d) { return y(d.number); })
+                    .attr("height", "0px")
+                    .transition().delay(0).duration(1500).attr("height", function(d) { return 140 - y(d.number); });
+       
+     
+        function type(d) {
+            d.number = +d.number;
+            return d;
+        }
+    
+    var xScale1 = d3.scale.linear()
+    .domain([1998, 2017])
+    .range([0, width-50]);
+
+var yScale1 = d3.scale.linear()
+    .domain([0, 20])
+    .range([height/5, 0]);
+
+var xAxis1 = d3.svg.axis()
+    .scale(xScale1)
+    .orient("bottom")
+    .innerTickSize(-height)  
+    .outerTickSize(0) 
+    .tickPadding(10); 
+
+var yAxis1 = d3.svg.axis()
+    .scale(yScale1)
+    .orient("left")
+    .innerTickSize(-width)  
+    .outerTickSize(0)
+    .tickPadding(10);
+
+var line = d3.svg.line()
+    .x(function(d) { return xScale1(d.name); })
+    .y(function(d) { return yScale1(d.number); });
+
+var svg_line = d3.select("#svg_line").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(30,0)");
+
+    d3.json("media/data/" + city_tendency_data, function(error, data_tendency) {
+            //data_tendency = parseInt(data_tendency);
+            console.log(data_tendency);
+  svg_line.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0,145)")
+      .call(xAxis1)
+
+  svg_line.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,5)")
+      .call(yAxis1)
+      .attr("width", width)
+
+  svg_line.append("path")
+      .datum(data_tendency)
+      .attr("class", "line")
+      .attr("d", line(data_tendency))
+      .attr("transform", "translate(0,5)")
+      .style("opacity", "0")
+      .transition().delay(700).duration(1500)
+      .style("opacity", "1")
+    });
+
+// risk表示。
+
+
+
+
+        //graph-----------
+
+  var svg_risk1 = d3.select("#svg_risk1").append("svg")
+  .attr("width", 250)
+  .attr("height", 200)
+  .append("g")
+  .attr("transform", "translate(125,110)");
+ 
+  
+  
+  var r = 80;
+ 
+  var color = d3.scale.ordinal()
+  .range(["skyblue","transparent"]);
+ 
+    //startAngleとendAngleは設定しない。
+    var arc = d3.svg.arc()
+    .innerRadius(50)
+    .outerRadius(r);
+ 
+  // pieはデータを取って、data / value / startAngle / endAngleのオブジェクトを作る。
+  // スタートとエンドが被らないように、さらに全体が360になるようにマッピングしてくれる。
+  var pie = d3.layout.pie();
+ 
+  d3.json("media/data/" + city_wind_data, function(error, data_w) {
+
+    var risk_w_35 = data_w[0].number; //2
+    var risk_w_50 = data_w[1].number; //20
+    var risk_w_60 = data_w[2].number; //40
+    var risk_num = risk_w_35*3+risk_w_50*20+risk_w_60*40;
+        if(risk_num > 100){
+            var risk_num = 100
+        };
+        console.log(risk_num);
+
+    var risk_data = [risk_num,100-risk_num];
+    console.log(risk_data);
+
+  svg_risk1.selectAll("path").data(pie(risk_data)).enter() // pie(data)で変換している。
+  .append("path")
+  .attr("fill",function(d) { return color(d.data); })
+  .attr("transform","rotate(90)")
+  .transition()
+  .delay(2000)   // トランジション開始
+  .duration(2000) // 1秒間でアニメーションさせる
+  .attrTween("d", function(d){    // 指定した範囲で値を変化させアニメーションさせる
+        var interpolate = d3.interpolate(
+            { startAngle : 0, endAngle : 0 },   // 各円グラフの開始角度
+            { startAngle : d.startAngle, endAngle : d.endAngle }    // 各円グラフの終了角度
+        );
+        return function(t){
+            return arc(interpolate(t)); // 時間に応じて処理
+        }
+    })
+
+  svg_risk1.append("text")
+  .text(risk_num + "%")
+  .attr("dy", "5")
+  .attr("dx", "-20")
+  .attr("fill","orange")
+  .style("opacity", "0")
+  .transition().delay(800).duration(2500)
+  .style("opacity", "1");
+
+  
+var suggestion1 = document.getElementById("suggestion1");
+var suggestion2 = document.getElementById("suggestion2");
+var check_price = document.getElementById("check_price");
+var buy_power = document.getElementById("buy_power");
+
+suggestion1.innerHTML = "当地域の災害リスクは" + risk_num + "％です。"
+
+if (risk_num < 25){
+suggestion2.innerHTML = "災害リスクは大きいとは言えませんが、念のために保険に入っておくことをおすすめします。";
+} else if (25 <= risk_num & risk_num <= 50){
+    suggestion2.innerHTML = "災害リスクは低いとも言えず、運用期間の災害に備えて保険には入っておきましょう。";
+} else if (50 < risk_num){
+    suggestion2.innerHTML = "運用期間に災害にあう可能性が高いので、必ず保険に入っておきましょう。";
+}
+
+
+
+  });
+
+$("#all_result").delay(3000).fadeIn(1200);
+
+
+
+// nissha graph show
+
+var nissha_data20 = [{"year": 2019, "nissha": nissha_list[0]}, {"year": 2020, "nissha": nissha_list[1]}, {"year": 2021, "nissha": nissha_list[2]},
+                    {"year": 2022, "nissha": nissha_list[3]}, {"year": 2023, "nissha": nissha_list[4]}, {"year": 2024, "nissha": nissha_list[5]},
+                    {"year": 2025, "nissha": nissha_list[6]}, {"year": 2026, "nissha": nissha_list[7]}, {"year": 2027, "nissha": nissha_list[8]},
+                    {"year": 2028, "nissha": nissha_list[9]}, {"year": 2029, "nissha": nissha_list[10]}, {"year": 2030, "nissha": nissha_list[11]},
+                    {"year": 2031, "nissha": nissha_list[12]}, {"year": 2032, "nissha": nissha_list[13]}, {"year": 2033, "nissha": nissha_list[14]},
+                    {"year": 2034, "nissha": nissha_list[15]}, {"year": 2035, "nissha": nissha_list[16]}, {"year": 2036, "nissha": nissha_list[17]},
+                    {"year": 2037, "nissha": nissha_list[18]},{"year": 2038, "nissha": nissha_list[19]}];
+
+
+    var xScale2 = d3.scale.linear()
+    .domain([2019, 2038])
+    .range([0, width-50]);
+
+var yScale2 = d3.scale.linear()
+    .domain([800, 1600])
+    .range([height/5, 0]);
+
+var xAxis2 = d3.svg.axis()
+    .scale(xScale2)
+    .orient("bottom")
+    .innerTickSize(-height)  
+    .outerTickSize(0) 
+    .tickPadding(10); 
+
+var yAxis2 = d3.svg.axis()
+    .scale(yScale2)
+    .orient("left")
+    .innerTickSize(-width)  
+    .outerTickSize(0)
+    .tickPadding(10);
+
+    var line2 = d3.svg.line()
+    .x(function(d) { return xScale2(d.year); })
+    .y(function(d) { return yScale2(d.nissha); });
+
+var nissha_graph = d3.select("#nissha_graph").data(nissha_data20).append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(35,0)");
+
+   
+  nissha_graph.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0,145)")
+      .call(xAxis2)
+
+  nissha_graph.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(0,5)")
+      .call(yAxis2)
+
+  nissha_graph.append("path")
+      .datum(nissha_data20)
+      .attr("class", "line")
+      .attr("d", line2(nissha_data20))
+      .attr("transform", "translate(0,5)")
+      .style("opacity", "0")
+      .transition().delay(700).duration(1500)
+      .style("opacity", "1")
+      
+      calc_price = 0;
+      for (i=0;i<20;i++){
+          var temporary_calc = nissha_list[i] * kw.value * fit.value;
+          calc_price += temporary_calc
+      };
+      console.log(calc_price);
+    var calc_profit = document.getElementById("calc_profit");
+    calc_profit.innerHTML = calc_price + "（円）";
+
+    $("#calc_profit").delay(3500).fadeIn(1000);
+    $("#ad_image").delay(4000).fadeIn(800);
+            
+
+});
+})
+});
+// all_result
+
+        
+    // END OF SCRIPT ------------------------------------------------            
+        </script>
+
 </body>
 </html>
 

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'map/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'map/premium.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        <nav class="class="globalMenuSp"">
+            <ul>
+                <a href="{% url 'home' %}"><li>e-zone</li></a>
+                <a href="{% url 'about' %}"><li>about</li></a>
+                <a href="{% url 'premium' %}"><li id="here">premium</li></a>
+                <a href="{% url 'contact' %}"><li>contact</li></a>
+            </ul>
+        </nav>
+    </div>
+    <div class="big_box">
+            <div class="top_box" id="first_line">
+                    <img src="{% static 'map/premium.jpg' %}">
+                    <h3>e-zone premium service</h3>
+                    <p>
+                            e-zoneはデータ解析をベースとした太陽光発電の発電量シミュレーションサービスです。<br>
+                            再生可能エネルギー発電事業の課題は日々変化し、データ分析に基づくソリューションは日々進化しています。<br>
+                            悩ましい課題、あれば良いなと思う機能等があればぜひこちらのページからお問い合わせください。
+                            
+                    </p>
+                </div>
+                
+    </div>
+
+
+
+    <footer>
+            <div>
+                <p>
+                    copyrights 2018 e-zone All Rights Reserved
+                </p>
+            </div>
+        </footer>
+    </body>
+    </html>

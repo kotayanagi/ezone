@@ -1,32 +1,39 @@
 body { 
     background-color:rgb(24, 24, 36);
-    width: 1000px;
+    width: 1020px;
     line-height: 2;
     color: rgba(255, 254, 254, 0.938);
     margin: auto;
 }
-
 svg {
     width: 500px;
     height: 700px;
     display: inline-block;
-    margin-top: 40px;
+    margin-top: 0px;
 }
-
+svg1 {
+    width: 500px;
+    height: 200px;
+    display: inline-block;
+    margin-top: 0px;
+}
+g {
+    width: 500px;
+}
 .header ul {
     width: 100%; 
-    line-height: 22px;
-    border-bottom: 0.5px solid rgba(173, 216, 230, 0.856);
+    line-height: 28px;
     background-color: rgba(255, 255, 255, 0);
     position: relative;
-    text-align: center;
+    text-align: left;
+    margin-left: 60px;
 }
 .header ul li {
     display: inline; 
     text-align: center;
     margin-left: 4%;
     font-size: 14px;
-    color: rgb(197, 197, 197);
+    color: lightblue;
 }
 .header ul li a {
     font-family: "明朝";
@@ -141,6 +148,11 @@ svg {
     background-color: rgba(173, 216, 230, 0.856);
     border-radius: 10px;
 }
+.select {
+    margin: 2px auto 2px auto;
+    font-size: 14px;
+    display: none;
+}
 .first_line span {
     line-height: 2;
     margin: 8px;
@@ -186,13 +198,12 @@ svg {
 
 .result_box {
     width: 95%;
-    height: 360px;
+    height: 480px;
     margin: auto;
     background-color:rgb(24, 24, 36);
     border-radius: 20px;
     border: 1px solid rgba(240, 173, 48, 0.733);
     box-shadow: 2px 1.5px rgba(10, 10, 10, 0.685);
-    transition: all 1s linear;
     display: none;
 }
 #result {
@@ -202,7 +213,7 @@ svg {
     text-align: left;
 }
 .first_result p {
-    font-size: 24px;
+    font-size: 22px;
     line-height: 2;
     margin: 32px;
     color: rgb(227, 222, 247);
@@ -210,12 +221,27 @@ svg {
 }
 .first_result span{
     color: rgb(255, 208, 0);
+    font-size: 18px;
 }
 .second_result{
     text-align: left;
 }
 .second_result p {
-    font-size: 24px;
+    font-size: 22px;
+    line-height: 2;
+    margin: 32px;
+    color: rgb(227, 222, 247);
+    border-bottom: 1px solid rgb(227, 222, 247);
+}
+.third_result span{
+    color: rgb(255, 115, 0);
+    font-size: 18px;
+}
+.third_result{
+    text-align: left;
+}
+.third_result p {
+    font-size: 22px;
     line-height: 2;
     margin: 32px;
     color: rgb(227, 222, 247);
@@ -223,6 +249,7 @@ svg {
 }
 .second_result span{
     color: rgb(255, 115, 0);
+    font-size: 18px;
 }
 .back {
     text-align: left;
@@ -250,4 +277,217 @@ svg {
 #backbtn2:hover {
     color: orange;
     cursor: pointer;
+}
+#s_map{
+    width: 500px;
+    height: 700px;
+    display: inline-block;
+    margin-top: 40px;
+}
+#svg_graph{
+    width: 500px;
+    height: 244px;
+    display: inline-block;
+    border-bottom: 1px dashed white;
+}
+.graph_head{
+    display: inline-block;
+    width: 120px;
+    margin-left: 40px;
+    transform: translate(0px,10px);
+}
+#svg_graph h6{
+    font-size: 12px;
+    width: 120px;
+    color: skyblue;
+}
+#svg_graph p{
+    width: 120px;
+    color: lightblue;
+}
+.graph_title{
+    text-align: center;
+    padding: -10px;
+    margin-top: 6px;
+}
+.graph_title span{
+    margin-top: 5px;
+    transform: translate(0,20px);
+    font-size: 14px;
+    color: white;
+}
+.tick {
+    fill: rgb(231, 230, 230);
+    font-size: 8px;
+    opacity: 0.2;
+}
+.tick line{
+    opacity: 0.2;
+}
+.domain{
+    fill: rgba(250, 248, 248, 0.952);
+    stroke-width: 1px;
+}
+#line_graph {
+    width: 500px;
+    height: 160px;
+    display: inline-block;
+}
+
+.visual{
+    width: 1020px;
+    height: 700px;
+    display: none;
+    position: relative;
+}
+.line{
+    fill: none;
+    stroke: skyblue;
+    stroke-width: 1px;
+  }
+.axis path,
+.axis line{
+  fill: none;
+  stroke: white;
+}
+.all_result_title{
+    margin-left: 10px;
+}
+.all_result_title span{
+    font-size: 14px;
+    color: ivory;
+    line-height: 1;
+}
+.suggestion_div{
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+.suggestion_div span{
+    color: rgb(253, 245, 201);
+    font-size: 15px;
+}
+.all_result_title p{
+    color: orange;
+    text-align: center;
+    border-radius: 20px;
+    width: 180px;
+    background-color: rgba(110, 110, 110, 0.89);
+    margin: 20px auto auto auto;
+}
+.all_result_title p:hover{
+    background-color: rgba(111, 172, 196, 0.863);
+    cursor: pointer;
+}
+.svg_line{
+    display: inline-block;
+    width: 500px;
+    height: 200px;
+    position: absolute;
+    top: 260px;
+    left: 2px;
+} 
+.svg_risk{
+    display: inline-block;
+    width: 250px;
+    height: 200px;
+    position: absolute;
+    top: 470px;
+    left: 2px;
+} 
+.all_result{
+    display: inline-block;
+    width: 250px;
+    height: 200px;
+    position: absolute;
+    top: 470px;
+    left: 252px;
+}  
+.svg_nissha{
+    display: inline-block;
+    width: 500px;
+    height: 200px;
+    position: absolute;
+    top: 120px;
+    left: 2px;
+}
+.nissha_title_box{
+    width: 500px;
+    height: 200px;
+    display: inline-block;
+}
+.nissha_title{
+    width: 500px;
+    display: inline-block;
+}
+.visual1{
+    width: 500px;
+    display: inline-block;
+    position: relative;
+}
+.visual2{
+    width: 500px;
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    left: 510px;
+    margin-left: 5px;
+}
+.pref_title_box{
+    text-align: center;
+    line-height: 2;
+    font-size: 32px;
+    color: orange;
+}
+.profit20_title{
+    top: 318px;
+    left: 20px;
+    position: absolute;
+    font-size: 14px;
+    width: 480px;
+    text-align: center;
+}
+#calc_profit{
+    font-size: 26px;
+    color: orange;
+    margin-top: 46px;
+    text-align: center;
+    letter-spacing: 2px;
+    border-bottom: 1px dashed lightblue;
+    display: none;
+}
+.ad_image_box{
+    margin: 395px auto auto 20px;
+}
+.ad_image{
+    width: 498px;
+    margin: auto;
+    height: 200px;
+    display: none;
+}
+.topbtn{
+    position: absolute;
+    left: 760px;
+    top: -24px;
+    color: white;
+}
+.topbtn:hover{
+    opacity: 0.6;
+}
+#numT1{
+    color: white;
+}
+#numT2{
+    color: white;
+}
+#numT3{
+    color: white;
+}
+#num1{
+    opacity:0;
+}
+#num2{
+    opacity:0;
+}
+#num3{
+    opacity:0;
 }

@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'map/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'map/contact.css' %}">
+    <title>太陽光発電＆災害シミュレーション</title>
+</head>
+<body>
+
+<div class="header">
+    <nav class="class="globalMenuSp"">
+        <ul>
+            <a href="{% url 'home' %}"><li>e-zone</li></a>
+            <a href="{% url 'about' %}"><li>about</li></a>
+            <a href="{% url 'contact' %}"><li id="here">contact</li></a>
+        </ul>
+    </nav>
+</div>
+
+<div class="big_box">
+<div class="top_box" id="first_line">
+        <img src="{% static 'map/contact1.jpg' %}">
+        <h3>contact</h3>
+        <p>
+                e-zoneはデータ解析をベースとした太陽光発電の発電量シミュレーションサービスです。<br>
+                再生可能エネルギー発電事業の課題は日々変化し、データ分析に基づくソリューションは日々進化しています。<br>
+                悩ましい課題、あれば良いなと思う機能等があればぜひこちらのページからお問い合わせください。
+                
+        </p>
+    </div>
+
+<div class="main_box">  
+    <h3>・e-zoneに関する質問や感想、依頼などをお受けしています。</h3>
+    <h3>・下記の「お問い合わせ」を押し、メールでお問い合わせください。</h3>
+    <h3>・お問い合わせの内容を確認の上、必要に応じて弊社から返信する場合があります。</h3>
+</div>
+
+<div class="button_div">
+    <a href="mailto:ezone.recep@gmail.com?subject=inquiry%20on%20ezone&amp;body=please%20put%20your%20name%20and%20questions">
+    <input type="button" value="お問い合わせ" class="submit_button">
+    </a>
+</div>
+
+</div>
+
+<footer>
+        <div>
+            <p>
+                copyrights 2018 e-zone All Rights Reserved
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

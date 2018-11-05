@@ -80,8 +80,8 @@ DATABASES = {
         'NAME': 'e_zone_db',
         'USER': 'kotayanagi',
         'PASSWORD': 'Popcorn0875',
-        'HOST':,
-        'PORT':,
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

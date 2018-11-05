@@ -28,15 +28,20 @@ p{
 #here {
     border-bottom: 1px solid rgba(255, 0, 0, 0.575);
 }
+footer div{
+    width: 100%; 
+    line-height: 40px;
+    background-color: rgba(143, 222, 253, 0.582);
+    text-align: center;
+}
+footer p{
+    font-size: 14px;
+    color: rgb(41, 40, 40);
+}
 
 .big_box {
     margin: auto;
     width: 90%;
-}
-p {
-    line-height: 2;
-    word-spacing: 0.8px;
-    letter-spacing: 0.8px;
 }
 .top_box {
     width: 100%;
@@ -64,42 +69,10 @@ p {
     background-color: rgba(255, 186, 82, 0.116);
     padding: 16px;
     border-radius: 10px;
-    color: rgba(44, 38, 38, 0.849);
+    color: rgba(43, 37, 37, 0.904);
 }
-.about_box {
-    padding: 0px 16px 16px 16px;
-    margin-top: 128px;
-    margin-bottom: 128px;
-    border-top: 1px solid rgba(170, 107, 31, 0.589);
-    border-bottom: 1px solid rgba(170, 107, 31, 0.589);
-}
-.about_box img{
-    width: 40%;
-    display: inline-block;
-    vertical-align: middle;
-}
-.about_box h3{
-    display: inline-block;
-    width: 55%;
-    text-align: center;
-    color: rgba(184, 99, 3, 0.849);
-}
-.about_box p {
-    padding-top: 24px;
-    padding-bottom: 12px;
-    border-top: 1px dashed rgba(128, 128, 128, 0.589);
-    color: rgba(44, 38, 38, 0.849);
-}
-footer div{
-    width: 100%; 
-    line-height: 40px;
-    background-color: rgba(143, 222, 253, 0.582);
-    text-align: center;
-}
-footer p{
-    font-size: 14px;
-    color: rgb(41, 40, 40);
-}
+
+
 
 @media screen and (max-width: 750px){
     .top_box h3{

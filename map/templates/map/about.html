@@ -1,13 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="{% static 'map/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'map/about.css' %}">
-    <title>Document</title>
+    <title>太陽光発電＆災害シミュレーション</title>
 </head>
 <body>
     <div class="header">
@@ -15,7 +15,6 @@
             <ul>
                 <a href="{% url 'home' %}"><li>e-zone</li></a>
                 <a href="{% url 'about' %}"><li id="here">about</li></a>
-                <a href="{% url 'price' %}"><li>price</li></a>
                 <a href="{% url 'contact' %}"><li>contact</li></a>
             </ul>
         </nav>
@@ -23,13 +22,13 @@
 
     <div class="big_box">
         <div class="top_box" id="first_line">
-            <img src="{% static 'map/about.png' %}">
-            <h3>e-zoneについて</h3>
+            <img src="{% static 'map/about1.jpg' %}">
+            <h3>about e-zone</h3>
 
             <p>
-                    e-zoneは太陽光発電の発電量シミュレーションサービスです。
+                    e-zoneは太陽光発電の発電量＆災害リスクシミュレーションサービスです。
                     日本全国、様々な地域を対象とし、
-                    規則性のない気象データから傾向を割り出すデータ解析と、AIのディープラーニング技術で、より精密な年間発電量を予測しています。
+                    規則性のない気象データから傾向を割り出すデータ解析で、より精密な年間発電量を予測しています。
             </p>
         </div>
 
@@ -55,11 +54,11 @@
 
         <div class="about_box" id="forth_line">
                 <img src="{% static 'map/deeplearning.jpg' %}">
-                <h3>AIのディープラーニング技術を用いたデータ解析</h3>
+                <h3>独自のアルゴリズムに基づいたデータ解析</h3>
     
                 <p>
                         膨大となる気象データから、独自のアルゴリズムで傾向を把握し、
-                        その傾向をAIに学習させることで、年単位の日射量予測を可能にしています。
+                        年単位の日射量予測を可能にしています。
                 </p>
         </div>
 
@@ -69,23 +68,13 @@
     
                 <p>
                         日本地図から都道府県を選択し、その中から都市とシステム容量、予想される売電価格を入力することで、
-                        年間の予想発電量と予想売電収入、そして初期費用を公開。
-                </p>
-        </div>
-
-        <div class="about_box" id="sixth_line">
-                <img src="{% static 'map/solar.jpg' %}">
-                <h3>Fit売電期間の20年間の発電量予測*</h3>
-    
-                <p>
-                        プレミアム会員(*)になれば、独自のアルゴリズムとディープラーニングによる日射量予測で、
-                        向こう２０年間の年別予想発電量と、およそ何年後に初期費用を回収できるかを確認することができます。
+                        年間の予想発電量と予想売電収入、そして20年間の売電収入と災害リスクを可視化します。
                 </p>
         </div>
 
         <div class="about_box" id="seventh_line">
                 <img src="{% static 'map/typhoon.jpg' %}">
-                <h3>災害リスクも可視化*</h3>
+                <h3>災害リスクを可視化</h3>
     
                 <p>
                         一番大きな懸念である台風などの自然災害。各地域の過去の様々な気象データを解析することで、
