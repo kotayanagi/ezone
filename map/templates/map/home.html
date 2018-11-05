@@ -479,7 +479,6 @@
         .projection(mercator);
          
         // dataset
-        //var dataset = 
         var width1 = 400,
         height1 = 700;
     
@@ -487,12 +486,9 @@
     
         // topojsonファイルの読み込み
         d3.json("{% static 'map/japan.json' %}", function(error, jp) {
-            console.log(jp);
              
             // topojsonからgeojsonへの変換。
             var geoJp = topojson.feature(jp, jp.objects.pref);
-    
-            //console.log(geoJp.features);
             
             //Title位置を取得
             var target = document.getElementById("prefecture_title");
@@ -518,7 +514,6 @@
                     if (selected_pref.style.display = "block"){
                         selected_pref.style.display = "none";
                     };} catch(e){};
-                    console.log(d.properties.name);
                     result_box.style.display = "none";
                     var select_id=this.id + "_pref";
                     selected_pref = document.getElementById(select_id);
@@ -529,9 +524,6 @@
                     option_box.style.display = "block"; 
                     selected_pref.style.display = "block";
                     pref_name = d.properties.name_ja;
-                    console.log(selected_pref);
-                    console.log(this);
-                    console.log(select_id);
                     })
                 .on("mouseover", function(d) {
                     target.innerHTML = d.properties.name_ja;
@@ -566,17 +558,16 @@
             for (var i=0;i<elements.length;i++){
                 if (elements[i].selected){
                     var city = elements[i];
-                    console.log(city);
                     japa_name = city.id;
                 };
             };
-            console.log(city.value);
+            
 
              //csv読み込みからの関数とコード
             
             var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成
             var city_data = city.value + '.csv';
-            console.log(city.value);
+            
             var city_wind_data = city.value + "_w.json";
             var city_tendency_data = city.value+"_w_tendency.json";
             
@@ -629,7 +620,7 @@
             var nissha = parseInt(result[1][1]) + parseInt(result[1][2]) + parseInt(result[1][3]) + parseInt(result[1][4]) + parseInt(result[1][5]) + parseInt(result[1][6]);
             var kw = document.getElementById("kw").value;
             var fit = document.getElementById("fit").value;
-            console.log(nissha_list);
+            
     
             // yearly_base result
             var year_nissha = Math.min.apply(null,nissha_list) + "~" + Math.max.apply(null,nissha_list);
@@ -685,9 +676,9 @@
         // データを読み込む
         d3.json("media/data/" + city_wind_data, function(error, data_w) {
             // データを入力ドメインとして設定
-            x.domain(data_w.map(function(d) {  console.log(d.name);return d.name;}));
+            x.domain(data_w.map(function(d) {  return d.name;}));
             y.domain([0, 20]);
-            console.log(data_w);
+            
 
         
     $("#submitbtn2").click(function(){
@@ -791,7 +782,7 @@ var svg_line = d3.select("#svg_line").append("svg")
 
     d3.json("media/data/" + city_tendency_data, function(error, data_tendency) {
             //data_tendency = parseInt(data_tendency);
-            console.log(data_tendency);
+            
   svg_line.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0,145)")
@@ -851,10 +842,10 @@ var svg_line = d3.select("#svg_line").append("svg")
         if(risk_num > 100){
             var risk_num = 100
         };
-        console.log(risk_num);
+        
 
     var risk_data = [risk_num,100-risk_num];
-    console.log(risk_data);
+    
 
   svg_risk1.selectAll("path").data(pie(risk_data)).enter() // pie(data)で変換している。
   .append("path")
@@ -974,7 +965,7 @@ var nissha_graph = d3.select("#nissha_graph").data(nissha_data20).append("svg")
           var temporary_calc = nissha_list[i] * kw.value * fit.value;
           calc_price += temporary_calc
       };
-      console.log(calc_price);
+      
     var calc_profit = document.getElementById("calc_profit");
     calc_profit.innerHTML = calc_price + "（円）";
 
